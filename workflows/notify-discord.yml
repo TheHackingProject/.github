@@ -1,0 +1,17 @@
+name: Discord Pull Request Notification
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send message to Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d "{\"content\": \"📣 Nouvelle PR par ${{ github.actor }} : ${{ github.event.pull_request.title }}\n🔗 ${{ github.event.pull_request.html_url }}\"}" \
+          $DISCORD_WEBHOOK
